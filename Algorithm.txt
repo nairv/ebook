@@ -3,8 +3,10 @@ Greedy algorithm for table cell selection
 
 Following is a naive cell selection algorithm for cell selection:
 
-1) Generate buckets ( sets ) for every row and every column O(rows * columns)
-2) Parse through the selected cells and put it into appropriate bucket. This means put a particular point in both the buckets which it falls into( corresponding row and column bucket)
+1) Generate buckets ( sets ) for every row and every column O(rows + columns)
+2) Parse through the selected cells and put it into appropriate bucket. 
+This means put a particular point in both the buckets which it falls into( corresponding row and column bucket)
+(1)and (2) have complexity of O((rows+ columns)* no of cell selections)
 3) Generate a set F = {B| B is a bucket containing some selected point and |B| != 0}
 4) Initialize U = Set of selected points
 
