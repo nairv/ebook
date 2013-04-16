@@ -2,6 +2,9 @@ var tablename;
 // U will contain all the selected points
 var U = new Set();
 
+var endt;
+var startt;
+
 // F will contain all the buckets
 // F has the format {"data-pk-value":{corresponding set containing the points} ,.....}
 var F = {};
@@ -19,13 +22,15 @@ var generateQuery = function(){
 	var query;
 	var type;
 	var union = "U(";
-	console.log(tempU.count());
+	console.log("TempU Count in generate :" + tempU.count());
 	count = tempU.count();
 	while(count > 0){
-		console.log(tempF);
-		console.log(tempC);
+		type = "";
+		union = "";
+		console.log("TempF: " + tempF);
+		console.log("TempC: " + tempC);
 		var set1 = tempF[largestBucket(tempC)];
-		console.log(set1);
+		console.log("LargestBucket :" + set1);
 		Object.keys(set1).forEach(function(key) {
 	    	console.log(key);
 	    	var obj = jQuery.parseJSON(key);
@@ -43,11 +48,11 @@ var generateQuery = function(){
 	    		type = "pk";
 	    	}
 	    	if(type === "col"){
-	    		console.log(obj["pkVal"]);
+	    		//console.log(obj["pkVal"]);
 	    		union = String(String(union) + "," + String(obj["pkVal"]));
 	    	}
 	    	else{
-	    		console.log(key["colVal"]);
+	    		//console.log(key["colVal"]);
 	    		union = String(String(union) + "," + String(obj["colVal"]));
 	    	}
 	    	//delete tempU[key];
@@ -58,18 +63,28 @@ var generateQuery = function(){
 
 		if(type === "col")
 		{
-			query1 = "{Project("+largestBucket(tempC)+")select("+union+")}";
+			query1 = "{&#8719;<sub>("+largestBucket(tempC)+")</sub>&#963;<sub>("+union+")</sub>}";
 		}
 		else{
-			query1 = "{Select("+largestBucket(tempC)+")Project("+union+")}";
+			query1 = "{&#963;<sub>("+largestBucket(tempC)+")</sub>&#8719;<sub>("+union+")</sub>}";
 		}	
 		//console.log(query1);
-		query = query + "," + query1;
+		if(query === undefined)
+			query = query1;
+		else
+			query = query + "," + query1;
 		tempU.minus(tempF[largestBucket(tempC)]);
 		delete(tempF[largestBucket(tempC)]);
 		delete(tempC[largestBucket(tempC)]);
+		delete set1;
 	}
-	console.log(String(query));
+	jQuery("#querybox").html("<p>"+String(query)+"</p>");
+	var d2 = new Date();
+	endt = d2.getTime();
+	console.log(startt);
+	console.log(endt);
+	console.log("after");
+	console.log("Time difference :"+ (endt - startt));
 }
 // Find the set in C with the largest number of elements 
 var largestBucket = function(o) {
@@ -139,12 +154,12 @@ var addToBucket= function(obj){
 		C[obj["colVal"]] = set1.count();
 		C[obj["pkVal"]] = set2.count();
 	}
-	/*console.log("Printing keys of C");
+	console.log("Printing keys of C");
 	Object.keys(C).forEach(function(key) {
 	    console.log(key);
 	});
-	console.log("Largest bucket "+largestBucket(C));
-	console.log(F[largestBucket(C)]);*/
+	console.log("Largest bucket : "+largestBucket(C));
+	console.log("F[LargestBucket(C)] :" + JSON.stringify(F[largestBucket(C)]));
 	generateQuery();
 }
 
@@ -176,13 +191,13 @@ var removeFromBucket = function(obj){
 	else{
 		console.log("Error in removeFromBucket");
 	}
-	/*console.log("Printing keys of C");
+	console.log("Printing keys of C");
 	Object.keys(C).forEach(function(key) {
 	    console.log(key);
 	});
 	console.log(JSON.stringify(C));
-	console.log("Largest bucket "+largestBucket(C));
-	console.log(F[largestBucket(C)]);*/
+	console.log("Largest bucket : "+largestBucket(C));
+	console.log("F[LargestBucket(C)] :" + JSON.stringify(F[largestBucket(C)]));
 	generateQuery();
 }
 
@@ -208,6 +223,9 @@ onload = function() {
     		// Onclick function for all cells
 	        rowcells[j].onclick = function() {
 			     	var cellval = {};
+			     	var d1 = new Date();
+			     	startt = d1.getTime();
+			     	console.log(startt);
 			    	cellval["colVal"] = this.getAttribute("data-col-val");
 			    	cellval["pkVal"] = this.getAttribute("data-pk-val");
 		 

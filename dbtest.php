@@ -87,7 +87,6 @@ function create_row($dataArr , $collist , $pk) {
 $all = mysql_fetch_all($res);
 
 //echo implode(",", $all) . "<br>";
-
 echo "<table id='mytable' border='1'>";
 echo "<thead>";
 for($i = 0; $i < count($collist); $i++) {
