@@ -72,7 +72,7 @@ var generateQuery = function(){
 		if(query === undefined)
 			query = query1;
 		else
-			query = query + "," + query1;
+			query = query + " U " + query1;
 		tempU.minus(tempF[largestBucket(tempC)]);
 		delete(tempF[largestBucket(tempC)]);
 		delete(tempC[largestBucket(tempC)]);
@@ -81,9 +81,6 @@ var generateQuery = function(){
 	jQuery("#querybox").html("<p>"+String(query)+"</p>");
 	var d2 = new Date();
 	endt = d2.getTime();
-	console.log(startt);
-	console.log(endt);
-	console.log("after");
 	console.log("Time difference :"+ (endt - startt));
 }
 // Find the set in C with the largest number of elements 
